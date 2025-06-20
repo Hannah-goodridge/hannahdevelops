@@ -1,0 +1,75 @@
+---
+slug: '/blog/dark-mode-toggler'
+date: '2022-05-25'
+title: 'Introducing Light and Dark Mode Toggler on My Website'
+description: 'Discover the new light and dark mode feature on my website, offering a personalized reading experience and improved accessibility. Learn how I implemented this feature using React, Gatsby, and Tailwind CSS.'
+tags: 'Blog, Personal, Light and Dark Mode, React, Gatsby, Tailwind CSS'
+author: 'Hannah Goodridge'
+metaTitle: 'Introducing Light and Dark Mode Toggler on My Website | Personal Blog'
+metaDescription: 'Explore the new light and dark mode feature on my website, offering a personalized reading experience and improved accessibility. Learn how I implemented this feature using React, Gatsby, and Tailwind CSS.'
+keywords: 'Light and dark mode, Light mode, Dark mode, Personalized reading experience, Improved accessibility, React, Gatsby, Tailwind CSS, Website feature, User experience, Hannah Goodridge blog'
+
+---
+
+## New Light and Dark Mode
+
+I'm thrilled to share some exciting news about my website. I've just rolled out a super cool new feature – light and dark mode! 🌞🌙
+
+### Why I Took the Plunge
+
+You know how sometimes you just need things a bit brighter, and other times you want that sleek, dark look? I felt the same way, so I thought, "Why not let everyone choose what suits them best?" That's why I decided to dive into adding light and dark mode options for all of you.
+
+## How I Made It Happen
+I'll be honest, playing around with new tech gets me excited. I'm heavily inpired by Josh Comeau, and he has an amazing post on light and dark mode [here](https://www.joshwcomeau.com/react/dark-mode/).
+So Likewise to make light and dark mode work, I used React, Gatsby, and Tailwind CSS. Here's a little peek at the code behind the scenes:
+
+### The Theme Context
+
+```js
+import React, { useState, useEffect, createContext, useContext } from 'react';
+
+const ThemeContext = createContext();
+
+// Getting dark mode information from OS!
+const supportsDarkMode = () => window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+const ThemeProvider = ({ children }) => {
+  const [dark, setDark] = useState(false);
+
+  const toggleDark = () => {
+    const newDark = !dark;
+    localStorage.setItem('dark', JSON.stringify(newDark));
+    setDark(newDark);
+  };
+
+  useEffect(() => {
+    // Getting dark mode value from localStorage!
+    const lsDark = JSON.parse(localStorage.getItem('dark'));
+    if (lsDark !== null) {
+      setDark(lsDark);
+    } else if (supportsDarkMode()) {
+      setDark(true);
+    }
+  }, []);
+};
+```
+### Making Your Experience Smoother
+You know how sometimes you just need things a bit brighter, and other times you want that sleek, dark look? I felt the same way, so I thought, "Why not let everyone choose what suits them best?" That's why I decided to dive into adding light and dark mode options for all of you.
+
+### How to use the feature
+
+You’ll find the theme toggle button in the top corner of the screen. Just click it to switch between modes. Easy peasy! And yes, your choice will be remembered the next time you visit.
+
+### Why It's Good for You
+
+Improved Readability: Light mode is perfect when you're basking in the sun or just need those crisp, clear visuals.
+
+Reduced Eye Strain: Dark mode is your go-to for late-night coding sessions or reading in the dark. Say goodbye to squinting!
+
+Battery Savings: If you're on a device with an OLED screen, dark mode can even help save battery life. Sweet, right?
+
+Personalized Experience: This is all about you! You get to choose the mode that vibes with your style and mood.
+
+Accessibility: I care about every single visitor. Light and dark mode make sure everyone feels at home.
+
+I’m really excited for you to try this out. Feel free to toggle between light and dark mode and find what feels right for you. Enjoy the new feature, and happy browsing! 🎉

@@ -1,0 +1,143 @@
+---
+slug: '/blog/squidex-graphql-gatsby'
+date: '2021-06-08'
+title: 'Connecting Gatsby to Squidex Using gatsby-source-graphql'
+description: 'Learn how to connect Gatsby to the Squidex CMS using the gatsby-source-graphql plugin and OAuth authentication.'
+tags: 'Blog, CMS, Squidex, Gatsby, GraphQL, OAuth, Web Development'
+author: 'Hannah Goodridge'
+metaTitle: 'Connecting Gatsby to Squidex CMS Using gatsby-source-graphql and OAuth'
+metaDescription: 'Discover how to integrate Gatsby with Squidex CMS using the gatsby-source-graphql plugin and OAuth. Step-by-step guide by Hannah Goodridge.'
+keywords: 'Gatsby, Squidex CMS, gatsby-source-graphql, OAuth authentication, GraphQL integration, Gatsby tutorial, Squidex tutorial, CMS integration, Web development, Gatsby and Squidex, Hannah Goodridge blog'
+---
+
+## Connecting Gatsby to Squidex
+
+I've been using Squidex for a while now and the task came up where we wanted to utilise this cms again for a project but this time using Gatsby.
+
+As usual I trawled the interweb to find out a few methods on how to do it I found little up-to-date sources, so I've added this to my blog.
+
+The issue with wanting to use Squidex is that it requires you to authenticate by first getting a token from the api which will then allow you to access the content you require, which is a little tricky if like me you've never done it before.
+
+The squidex docs have an in depth guide on how to do this [here](https://docs.squidex.io/02-documentation/developer-guides/api-overview/authentication).
+
+The tricky part is the token expires every 30 days so we need to generate a new one on every request which means chaining fetch requests.
+
+To start off inside my gatsby.config file we first we need to make sure the important things like the client id and client secret (generated from squidex) are stored in .env files which are not committed into the repository.
+This is good practice for security and as its stored in one place good for reusability.
+
+```
+//import your secrets
+const { CLIENT_ID } = config.env.secrets;
+const { CLIENT_SECRET } = config.env.secrets;
+const { getToken } = require('./src/utils/api');
+
+//then in the plugins section use the below
+
+{
+  resolve: 'gatsby-source-graphql',
+  options: {
+    typeName: 'Squidex',
+    fieldName: 'squidex',
+    url: `${process.env.CONTENT_URI}`,
+    // HTTP headers alternatively accepts a function (allows async)
+    headers: async () => {
+      return {
+        Authorization: await getToken({
+          CLIENT_ID,
+          CLIENT_SECRET,
+        }),
+      };
+    },
+    // Additional options to pass to node-fetch
+    fetchOptions: {},
+  },
+},
+```
+
+Above you can see I have a custom getToken asynchronous function which does a fetch request storing the token from the squidex api.
+
+```
+  const getToken = async ({ CLIENT_ID, CLIENT_SECRET }) => {
+    try {
+      const response = await fetch(process.env.TOKEN_URI, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: qs.stringify({
+          grant_type: 'client_credentials',
+          client_id: CLIENT_ID,
+          client_secret: CLIENT_SECRET,
+          scope: 'squidex-api',
+        }),
+      });
+      const json = await response.json();
+      const token = `${json.token_type} ${json.access_token}`;
+      return token;
+    } catch (err) {
+      return console.warn(err);
+    }
+  };
+```
+
+I've stored the above function in a utils folder as I want to use it in a few places.
+
+We then need to update on gatsby-node file with a onPreInit function, this function will run as soon as plugins are loaded, before cache initialization and bootstrap preparation. So, inside your gatsby-node file add these lines:
+
+```
+
+const config = require(`./config.json`);
+const { CLIENT_ID } = config.env.secrets;
+const { CLIENT_SECRET } = config.env.secrets;
+
+require('es6-promise').polyfill();
+require('isomorphic-fetch');
+
+const credCache = new Map();
+
+const { getToken } = require('./src/utils/api');
+
+// this allows us to see the squidex instance in our graphql and store the token in cache
+exports.onPreInit = async () => {
+  const data = await getToken({
+    CLIENT_ID,
+    CLIENT_SECRET,
+  });
+  credCache.set('token', `${data.token_type} ${data.access_token}`);
+};
+
+exports.createPages = async ({ graphql, actions }) => {
+  const { createPage } = actions;
+  //create your pages here
+```
+
+from this you will be able to see the squidex instance inside `http://localhost:8000/___graphql`
+
+you should then be able to query the data you need in order to create your pages in the create pages function.
+
+An example query I have running is:
+
+```
+{
+  squidex {
+    queryHomepageContents {
+      flatData {
+        slug
+        name
+      }
+    }
+  }
+}
+
+```
+
+as I have a schema item in squidex called Homepage.
+
+Squidex also offers a powerful graphql query engine that allows different query languages. So far the following query languages are available:
+
+- OData queries that is the first system that has been implemented using an existing solution that was easy to adapt, they are easier to write in URLs.
+- JSON queries are newer and are mainly used the UI, because they are faster and easier to parse. It is recommended to use JSON queries in your client.
+
+This doesn't get enough praise for me as it's saved me lots of headaches trying to figure out if my queries are working or not!
+
+Best of luck!

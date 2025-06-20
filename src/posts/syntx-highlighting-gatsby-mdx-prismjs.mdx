@@ -1,0 +1,128 @@
+---
+slug: '/blog/syntx-highlighting-gatsby-mdx-prismjs'
+date: '2021-02-26'
+title: 'Migrating from .md to .mdx files in Gatsby '
+description: 'Migrating from .md to .mdx files in Gatsby a how to guide '
+tags: 'Blog, First post, Personal'
+author: 'Hannah Goodridge'
+metaTitle: 'Migrating from .md to .mdx files in Gatsby'
+metaDescription: 'Migrating from .md to .mdx files in Gatsby a how to guide'
+---
+
+I recently migrated my content over from plain markdown files to MDX files because I wanted to harness the power of using react components in some of my blog posts.
+
+MDX is a superset of Markdown. It allows you to write JSX inside markdown. This includes importing and rendering React components!
+
+## Getting to it
+
+First off I converted my `.md` files to `.mdx`.
+
+I then updated my gatsby-config.js to use:
+
+```js
+  {
+    resolve: `gatsby-source-filesystem`,
+    options: {
+      name: `content`,
+      path: `${__dirname}/src/content`,
+    },
+  },
+  {
+    resolve: 'gatsby-plugin-page-creator',
+    options: {
+      path: `${__dirname}/src/content`,
+    },
+  },
+  {
+    resolve: 'gatsby-plugin-mdx',
+    options: {
+      extensions: ['.mdx', '.md'],
+    },
+  }
+```
+
+Removing any `gatsby-transformer-remark` plugins along the way.
+
+Notice that I've had to add the path to my content folder where I keep my content pages.
+
+In order to process and use Markdown or MDX in Gatsby, you can use the gatsby-source-filesystem plugin.
+
+The `gatsby-plugin-page-creator` is optional but I need it becuase here I'm creating additional “pages” so want to override the default usage.
+
+In your component import the following:
+
+```js
+import { MDXProvider } from '@mdx-js/react';
+```
+
+and
+
+```js
+const { body, frontmatter } = mdx;
+return (
+  <article>
+    <MDXProvider components={[myComponent]}>{body}</MDXProvider>
+  </article>
+);
+```
+
+Here you can see I am passing `myComponent` to the MDXProvider, all MDX components passed into the components prop of the MDXProvider will be made available to MDX documents that are nested under the provider.
+
+My graphql query inside the page has to pull in the body data from my mdx graphql query.
+
+The graphql looks like:
+
+```js
+export const myQuery = graphql`
+  query() {
+    mdx() {
+      body
+      frontmatter {
+        slug
+        title
+      }
+    }
+  }
+`;
+```
+
+The contents of my `.mdx` files look something like this:
+
+```md
+---
+title: 'my title'
+slug: 'posts/my-blog-post'
+---
+
+### this is the body of the .mdx file
+
+import { myComponent } from "../components/myComponent"
+
+  <myComponent text="some text" />
+```
+
+The frontmatter needs to appear at the top of the file and then imports/content can follow.
+
+In the gatsby docs it states you _can_ pass the frontmatter data to the jsx component like this if thats something you want to do:
+
+```jsx
+<MDXRenderer frontmatter={post.frontmatter}>{post.body}</MDXRenderer>
+```
+
+```md
+---
+title: Hello World
+---
+
+<p>{props.frontmatter.title}</p>
+```
+
+## !Important
+
+For now, this only works if the .mdx file exporting the query is placed in src/pages.
+
+## Updating gatsby node and graphql queries
+
+Switch your `allMarkdownRemark` or `markdownRemark` graphql queries in your app for `allMdx` or `mdx`
+
+And thats that!

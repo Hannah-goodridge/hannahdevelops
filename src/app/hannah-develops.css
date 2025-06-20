@@ -1,0 +1,532 @@
+@theme {
+    --color-primary: #333647;
+    --color-secondary: #252734;
+    --color-tertiary: #555a77;
+    --color-highlight: #39BB9A;
+    --color-lowlight: #1b6452;
+    --color-lowestlight: #034a43;
+    --color-peach: #F4876E;
+    --color-yellow: #FFC12A;
+    --font-serif: 'DM Sans', sans-serif;
+    --font-body: 'Poppins', sans-serif;
+    --color-scheme: light dark;
+    --gradient-top: linear-gradient(180deg, rgba(244,135,110,1) 0%, rgba(255,193,102,1) 50%, rgba(73,197,184,1) 100%);
+    --gradient-bottom: linear-gradient(-180deg, rgba(244,135,110,1) 0%, rgba(255,193,102,1) 50%, rgba(73,197,184,1) 100%);
+    --gradient-left: linear-gradient(90deg, rgba(244,135,110,1) 0%, rgba(255,193,102,1) 50%, rgba(73,197,184,1) 100%);
+    --gradient-right: linear-gradient(-90deg, rgba(244,135,110,1) 0%, rgba(255,193,102,1) 50%, rgba(73,197,184,1) 100%);
+    --hero-inverted: url('../assets/images/bg-hero-teal.svg');
+
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+
+body, html {
+  font-family: var(--font-body);
+  @apply text-gray-900 flex flex-col justify-center items-center w-screen overflow-x-hidden;
+}
+main {
+  @apply w-screen;
+}
+
+.bg-hero-inverted {
+  background-image: var(--hero-inverted);
+}
+
+
+@layer utilities {
+  /* All your custom utility classes and @apply rules go here */
+  .dark .dark-switcher .sun {
+    @apply invisible -translate-x-8 opacity-0 scale-0;
+  }
+  .dark .dark-switcher .moon {
+    @apply visible;
+  }
+  .light .dark-switcher .moon {
+    @apply invisible translate-x-8 opacity-0 scale-0;
+  }
+  .light .dark-switcher .sun {
+    @apply visible;
+  }
+  .light .nav-trigger span {
+    @apply bg-primary;
+  }
+  .dark .nav-trigger span {
+    @apply bg-white;
+  }
+  .nav-trigger span {
+    transition: all ease-in-out 0.3s;
+    @apply w-full h-0.5 block rounded-full my-2 mx-auto;
+  }
+  .nav-trigger.isActive span {
+    transition: all ease-in-out 0.3s;
+  }
+  .nav-trigger.isActive {
+    transition: all 0.3s ease-in-out;
+    transition-delay: 0.6s;
+    transform: rotate(45deg);
+  }
+  .nav-trigger.isActive span:nth-child(2) {
+    width: 0px;
+  }
+  .nav-trigger.isActive span:nth-child(1),
+  .nav-trigger.isActive span:nth-child(3) {
+    transition-delay: 0.3s;
+  }
+  .nav-trigger.isActive span:nth-child(1) {
+    transform: translateY(10px);
+  }
+  .nav-trigger.isActive span:nth-child(3) {
+    transform: translateY(10px) rotate(90deg);
+  }
+  .anim-ready .anim-header,
+  .anim-ready .anim-slide-in-bottom,
+  .anim-ready .anim-slide-in-left,
+  .anim-ready .underline-swipe,
+  .anim-ready .square {
+    opacity: 0;
+    will-change: transform;
+  }
+  .anim-triggered .anim-header {
+    animation: 0.5s cubic-bezier(0.215, 0.61, 0.355, 1) 0s 1 normal both running tracking-in-contract;
+    animation-delay: 0.5s;
+  }
+  .anim-triggered .anim-slide-in-bottom {
+    animation: 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s 1 normal both running slide-in-bottom;
+  }
+  .anim-triggered .anim-slide-in-left {
+    animation: 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s 1 normal both running slide-in-left;
+  }
+  .anim-triggered .anim-delay-1 {
+    animation-delay: 0.2s;
+  }
+  .anim-triggered .anim-delay-2 {
+    animation-delay: 0.4s;
+  }
+  .anim-triggered .anim-delay-3 {
+    animation-delay: 0.6s;
+  }
+  .anim-triggered .anim-delay-4 {
+    animation-delay: 0.8s;
+  }
+  .anim-triggered .anim-delay-5 {
+    animation-delay: 1s;
+  }
+  .dark-switcher .moon {
+    stroke: #fccc00;
+    @apply block absolute w-full h-full top-0 scale-100 opacity-100;
+    transition: all ease-in-out 500ms;
+  }
+  .dark-switcher .sun {
+    stroke: #fccc00;
+    @apply block absolute w-full h-full top-0 scale-100 opacity-100;
+    transition: all ease-in-out 500ms;
+  }
+  .nav-link:hover {
+    @apply cursor-pointer opacity-100;
+  }
+  .is-current::after {
+    content: '';
+    left: calc(50% - 5px);
+    bottom: -20px;
+    width: 10px;
+    height: 10px;
+    @apply absolute rounded-full bg-highlight block;
+    transition: all 0.4s ease;
+  }
+  .paw-prints:hover svg {
+    @apply opacity-100;
+  }
+  .paw-prints svg {
+    @apply opacity-0;
+    transition: opacity 600ms ease-in-out;
+  }
+  .paw-print-2 {
+    @apply absolute;
+    top: -17px;
+    width: 12px;
+    right: -2px;
+    transition-delay: 200ms !important;
+  }
+  .paw-print-3 {
+    @apply absolute;
+    top: -27px;
+    width: 10px;
+    right: -15px;
+    transition-delay: 400ms !important;
+  }
+  .paw-print-4 {
+    @apply absolute;
+    top: -37px;
+    width: 8px;
+    right: -3px;
+    transition-delay: 600ms !important;
+  }
+  .anim-underline:hover::after {
+    visibility: visible;
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+  .anim-underline::after {
+    content: '';
+    height: 2px;
+    left: 0;
+    top: 30px;
+    transition: width 0.3s ease 0s, left 0.3s ease 0s;
+    @apply absolute block bottom-0 w-0;
+  }
+  .static-gradient-underline {
+  }
+  .static-gradient-underline:after {
+    top: auto !important;
+    visibility: visible !important;
+    transform: scaleX(1) !important;
+    width: 100%;
+  }
+  .anim-underline-highlight:after {
+    @apply bg-[gradient-right];
+  }
+  .square::before {
+    content: '';
+    padding-top: 100%;
+    float: left;
+  }
+  .half-bg {
+    background: linear-gradient(to bottom, #252734 50%, #333647 50%);
+  }
+  .anim-underline:hover::after {
+    @apply w-full left-0;
+  }
+  .underline-swipe {
+    animation: slide-in-left 800ms cubic-bezier(0.74, 0.06, 0.4, 0.92) forwards;
+  }
+  @media (min-width: 1280px) {
+    .anim-triggered .dot {
+      @apply w-0 h-0 bg-white absolute;
+      border-radius: 50%;
+      animation: popIn 0.8s cubic-bezier(0.74, 0.06, 0.4, 0.92) forwards;
+      animation-delay: 1.5s;
+      margin-left: 5px;
+      margin-top: -10px;
+      bottom: 13px;
+      right: -28px;
+    }
+  }
+  @media (max-width: 1279px) {
+    .dot {
+      @apply w-4 h-4 inline bg-highlight;
+    }
+  }
+  .lego-svg {
+    @apply w-24 h-24 absolute;
+    right: -150px;
+    top: 350px;
+    transform: rotate(25deg);
+  }
+  .cloud-strife-svg {
+    @apply w-24 h-24 absolute;
+    left: -180px;
+    top: 600px;
+    transform: scaleX(-1) rotate(25deg);
+  }
+  .path {
+    stroke-dasharray: 1975;
+    stroke-dashoffset: 1975;
+    animation: dash 3s linear forwards;
+  }
+}
+
+.bg-gradient-right {
+  background: var(--gradient-right);
+}
+.bg-gradient-left {
+  background: var(--gradient-left);
+}
+.bg-gradient-top {
+  background: var(--gradient-top);
+}
+.bg-gradient-bottom {
+  background: var(--gradient-bottom);
+}
+
+@keyframes dash {
+  to {
+    stroke-dasharray: 1975 0;
+  }
+}
+
+.richtext ul li {
+  list-style-type: disc;
+  padding-bottom: 20px;
+}
+
+.richtext ol li {
+  list-style-type: decimal;
+  padding-bottom: 20px;
+}
+
+.richtext a {
+  @apply underline;
+}
+
+.richtext ul,
+.richtext ol {
+  padding-top: 20px;
+  padding-left: 30px;
+  padding-bottom: 40px;
+  @apply font-serif;
+}
+
+.richtext h1 {
+  @apply text-4xl font-bold mb-6 leading-tight;
+}
+
+.richtext h2 {
+  @apply text-3xl font-bold mb-5 leading-tight;
+}
+
+.richtext h3 {
+  @apply text-2xl font-bold mb-4 leading-tight;
+}
+
+.richtext h4 {
+  @apply text-xl font-bold mb-3 leading-tight;
+}
+
+.richtext h5 {
+  @apply text-lg font-bold mb-3 leading-tight;
+}
+
+.richtext h6 {
+  @apply text-base font-bold mb-3 leading-tight;
+}
+
+.dark .richtext a {
+  @apply text-white underline;
+}
+
+.richtext p:not(.richtext-xclude) {
+  @apply mb-4 leading-8 font-serif;
+}
+
+.richtext blockquote {
+  border: 2px solid;
+  @apply border-highlight p-8 mb-12 mt-12 relative max-w-lg mx-auto;
+}
+
+.border-colour-gradient {
+  border-image: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='50' y1='100' x2='50' y2='0'%3E%3Cstop offset='0' stop-color='%2349c5b8'/%3E%3Cstop offset='.33' stop-color='%23f4876e'/%3E%3Cstop offset='.66' stop-color='%23ffc12a'/%3E%3Cstop offset='.999' stop-color='%2349c5b8'/%3E%3C/linearGradient%3E%3Cpath d='M1.5 1.5h97v97h-97v-97' fill='none' stroke='url(%23a)' stroke-width='3' stroke-linecap='square' stroke-dasharray='388'/%3E%3C/svg%3E")
+    1;
+  border-image-radius: 10px;
+}
+
+.richtext blockquote::after {
+  content: '';
+  width: 30px;
+  height: 40px;
+  left: 50px;
+  bottom: -30px;
+  @apply block absolute bg-white;
+}
+
+.dark .richtext blockquote::after {
+  @apply bg-primary;
+}
+
+.richtext blockquote::before {
+  content: '';
+  border: 2px solid;
+  border-radius: 0 50px 0 0;
+  width: 30px;
+  height: 30px;
+  bottom: -30px;
+  left: 50px;
+  border-bottom: none;
+  border-left: none;
+  z-index: 3;
+  @apply border-highlight absolute;
+}
+
+.richtext blockquote h1,
+.richtext blockquote h2,
+.richtext blockquote h3,
+.richtext blockquote h4,
+.richtext blockquote h5 {
+  @apply mb-0;
+}
+
+.richtext pre {
+  @apply dark:bg-secondary bg-gray-100 rounded my-12 p-3 overflow-auto;
+}
+
+.richtext code {
+  @apply w-full;
+}
+
+.text-shadow {
+  text-shadow: 3px 3px rgb(57 187 154);
+}
+
+.dark .text-shadow {
+  text-shadow: 3px 3px rgb(57 187 154);
+}
+
+.container {
+  height: 200px;
+  width: 350px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+}
+
+.paused {
+  animation-play-state: paused;
+}
+.resumed {
+  animation-delay: -1.5s; /* start from the middle of the animation */
+}
+@keyframes mainBlock {
+  0% {
+    width: 0%;
+    left: 0;
+  }
+  100% {
+    width: 120px;
+    left: 100%;
+  }
+}
+@keyframes popIn {
+  0% {
+    width: 0px;
+    height: 0px;
+    opacity: 0;
+  }
+  25% {
+    width: 10px;
+    height: 10px;
+    opacity: 1;
+    bottom: 45px;
+  }
+  50% {
+    width: 7px;
+    height: 7px;
+    bottom: 0px;
+    width: 15px;
+  }
+  100% {
+    width: 16px;
+    height: 16px;
+    background-color: #39BB9A;
+    bottom: 14px;
+    opacity: 1;
+  }
+}
+@keyframes tracking-in-contract {
+  0% {
+    letter-spacing: 1em;
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    letter-spacing: normal;
+    opacity: 1;
+  }
+}
+@keyframes slide-in-left {
+  0% {
+    transform: translateX(-1000px);
+    transform-origin: 0% 0%;
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    transform-origin: 0% 0%;
+    opacity: 1;
+  }
+}
+@keyframes slide-in-bottom {
+  0% {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes bounce-in-top {
+  0% {
+    transform: translateY(-500px);
+    animation-timing-function: ease-in;
+    opacity: 0;
+  }
+  38% {
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+    opacity: 1;
+  }
+  55% {
+    transform: translateY(-65px);
+    animation-timing-function: ease-in;
+  }
+  72% {
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+  }
+  81% {
+    transform: translateY(-28px);
+    animation-timing-function: ease-in;
+  }
+  90% {
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+  }
+  95% {
+    transform: translateY(-8px);
+    animation-timing-function: ease-in;
+  }
+  100% {
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+  }
+}
+
+@keyframes gooey-breathing {
+  0% {
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    transform: scale(1.02) translateY(-5px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+.hero-svg-background path {
+  animation: gooey-breathing 8s ease-in-out infinite;
+  transform-origin: 50% 50%;
+}
+
+.hero-svg-background path:nth-of-type(1) {
+  animation-delay: 0s;
+}
+
+.hero-svg-background path:nth-of-type(2) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+
+.hero-svg-background path:nth-of-type(3) {
+  animation-delay: -4s;
+  animation-duration: 9s;
+}
+
+.hero-svg-background path:nth-of-type(4) {
+  animation-delay: -6s;
+  animation-duration: 10s;
+}

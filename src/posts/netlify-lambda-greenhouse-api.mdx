@@ -1,0 +1,174 @@
+---
+slug: '/blog/netlify-greenhouse-lambda-functions'
+date: '2021-05-25'
+title: 'Implementing a Netlify Function with Greenhouse Job Board API POST Request in Gatsby'
+description: 'Learn step-by-step how to implement a Netlify Lambda function to send a POST request to the Greenhouse Job Board API using Gatsby and Axios.'
+tags: 'Blog, Netlify, Lambda, Axios, Greenhouse Job Board API, Gatsby, React, JavaScript'
+author: 'Hannah Goodridge'
+metaTitle: 'Implementing a Netlify Function with Greenhouse Job Board API in Gatsby'
+metaDescription: 'Discover how to set up a Netlify Lambda function to send POST requests to the Greenhouse Job Board API using Gatsby and Axios. Step-by-step guide by Hannah Goodridge.'
+keywords: 'Netlify function, Greenhouse Job Board API, Gatsby POST request, Lambda function Netlify, Axios POST request, Gatsby and Netlify, JavaScript Lambda, Gatsby tutorial, Netlify tutorial, API integration in Gatsby'
+---
+
+I recently had the pleasure of having to integrate a greenhouse job board into a careers page and couldn't find many good examples to call on, so I've posted my own incase it should help somebody.
+
+## Here's what we wanted to achieve:
+
+1. User fills out application form pulled from Greenhouse job post
+2. User submits application
+3. Form data in the form of JSON gets sent to the greenhouse job board api and returns a response.
+
+I had to do a bit of reading up on netlify functions as I found that the greenhouse api [docs](https://developers.greenhouse.io/job-board.html#submit-an-application) requires you to proxy requests. This was found in a comment buried in the docs and was easliy missed, so I've printed below:
+
+> Please keep in mind that the HTTP Basic Auth API token is a secret key. Any form posts should be proxied by your own servers. Any direct post to the /applications POST method would reveal your secret key to anybody that views source--which would be a very bad thing.
+
+Not particularly helpful...
+
+Now to write a netlify function, create a functions folder at the root of your application:
+
+```md
+/src
+/functions
+gatsby-browser.js
+package.json
+.gitignore
+etc
+```
+
+Inside that function is where we need our second POST request.
+Remember we are on the server now and we need to use appropriate server methods to do a POST request.
+This is where axios comes in after importing that module, after this we then want to get the form data submitted in the form application, parse it, then post it to the greenhouse job board api. Take a look at the way I did it below:
+
+```JS
+
+const axios = require('axios')
+
+const handler = async function (event, context, callback) {
+  let body = {}
+  try {
+    body = JSON.parse(event.body)
+    // parse the data from the form submit
+    const {url,formData} = body;
+    // as part of the body request I'm also sending the relevant job board url
+    // urls looks something like https://boards-api.greenhouse.io/v1/boards/{board_token}/jobs/{id}
+    const options = {
+      method: 'POST',
+      url,
+      data: formData,
+      headers: {
+        Authorization: `Basic ${process.env.API_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+    };
+    return axios(options).then(function(response){
+      return callback(null, {
+        statusCode: response.status,
+        body: JSON.stringify({result:response.data}),
+      })
+    }).catch(function(error) {
+      let res = {};
+      if (error.response) {
+        /*
+         * The request was made and the server responded with a
+         * status code that falls out of the range of 2xx
+         */
+        res =  {
+          statusCode: error.response.status,
+          statusText: error.response.data.error,
+          body:JSON.stringify({result:error.message}),
+        }
+      } else if (error.request) {
+          /*
+          * The request was made but no response was received, `error.request`
+          * is an instance of XMLHttpRequest in the browser and an instance
+          * of http.ClientRequest in Node.js
+          */
+          res = {
+            statusCode: 400,
+            body:JSON.stringify({result:error.message}),
+          }
+      } else {
+        // Something happened in setting up the request and triggered an Error
+        res = {
+          statusCode: 500,
+          body: JSON.stringify({result:error.message}),
+        }
+      }
+      return res;
+    });
+
+  } catch (e) {
+  }
+}
+
+module.exports = { handler }
+
+```
+
+A couple of things to note here, firstly, store your api token as a environment variable, you can set these in netlify by looking under site settings, beware of any urls you want to use client side as they need to be prefixed with GATSBY as seen [here](https://www.gatsbyjs.com/docs/how-to/local-development/environment-variables/).
+
+The second things is to specify the correct folder within netlify. This can be found under Functions > Settings, then edit the functions directory to be your functions folder at the root of your site.
+
+An important thing to note, if you don’t configure a custom functions directory, Netlify will use netlify/functions as the default and deploy any functions you save there.
+
+Within the form component we have created an onSubmit handler, which does the first part of a fetch request:
+
+```JS
+  const onSubmit = async data => {
+    const toBase64 = file =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => {
+          resolve(reader.result.substring(reader.result.indexOf(',') + 1))
+        }
+        reader.onerror = error => reject(error)
+      })
+
+    const resume = data.resume
+      ? {
+          resume_content_filename: data.resume[0].name,
+          resume_content: await toBase64(data.resume[0]),
+        }
+      : {}
+
+      const coverLetter = data.cover_letter
+      ? {
+        cover_letter_content_filename: data.cover_letter[0].name,
+        cover_letter_content: await toBase64(data.cover_letter[0]),
+        }
+      : {}
+
+      const url = `${process.env.GATSBY_API_URL}${id}`;
+      // prefix any client side api urls with GATSBY to get them to work
+      // we passed the id to the form further up in our component
+      const formData = { ...data, ...resume, ...coverLetter, url }
+
+     // netlify POST requests must also be in JSON format
+
+    fetch(`/.netlify/functions/name-of-netlify-function-here`, {
+      method: 'POST',
+      body: JSON.stringify({
+        formData:JSON.stringify(formData),
+        url
+      }),
+
+    }).then(function(response) {
+      if(response.status === 200){
+        // handle success
+      }else{
+        throw new Error();
+      }
+
+    }).catch(function(e) {
+      // handle errors
+    });
+  }
+
+```
+
+Once this data has been sent it will then talk to your netlify function (specified in the fetch request as the url parameter) and post the form data to your greenhouse job board api.
+
+For more netlify function examples see here: https://functions.netlify.com/examples/
+
+Enjoy :)

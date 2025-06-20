@@ -1,0 +1,265 @@
+---
+slug: '/playground/circular-draggable-audio-player'
+date: '2024-05-21'
+title: 'Circular Draggable Audio Player in React'
+description: 'Learn how to build a circular draggable audio player in React with this detailed code snippet and guide.'
+tags: 'React, Audio Player, Draggable UI, Code Snippet, Web Development, Frontend Development'
+author: 'Hannah Goodridge'
+metaTitle: 'Circular Draggable Audio Player in React | Code Snippet by Hannah Goodridge'
+metaDescription: 'Discover how to create a circular draggable audio player in React with this comprehensive guide and code snippet by Hannah Goodridge. Ideal for enhancing your web project.'
+keywords: 'Circular audio player, Draggable audio player, React audio player, Audio player code snippet, React draggable UI, Frontend audio player, Web development snippet, Interactive audio player, React development, Web UI components'
+---
+
+import DraggableAudioPlayer from '../../components/DraggableAudioPlayer';
+
+import CSS from '../../components/DraggableAudioPlayer/index.css';
+
+Back when I was hustling in the agency world, I had this fun project as part of a campaign - building a circular draggable audio player! There was no ready-made solution back then and jQuery was still the go-to. So, I had to roll up my sleeves and create one from scratch.
+
+I was quite proud about what I built that I threw it on CodePen and pretty much forgot about it. But guess what? It turned out to be quite a hit! A bunch of people reached out to me, asking about it.
+
+Here’s the initial version on CodePen using HTML, CSS, and jQuery:
+
+<IframeWrapper height="400px" src="https://codepen.io/HannahG/embed/RMGqXR?default-tab=html%2Cresult" />
+
+But then I thought, why not create a React version for all the modern devs out there? So, here it is:
+
+<DraggableAudioPlayer />
+
+## Breaking it down
+
+Let's break down the code step-by-step so you can understand how it all works.
+
+```jsx
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+
+const AudioPlayer = () => {
+  const audioRef = useRef(null);
+  const circleRef = useRef(null);
+  const dotRef = useRef(null);
+  const pathRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [totalLength, setTotalLength] = useState(0);
+
+  const handleDrag = useCallback(
+    e => {
+      const bounds = circleRef.current.getBoundingClientRect();
+      const radius = bounds.width / 2;
+      const dx = e.clientX - (bounds.left + radius);
+      const dy = e.clientY - (bounds.top + radius);
+      let angle = Math.atan2(dy, dx);
+
+      if (angle < 0) {
+        angle += 2 * Math.PI; // Normalize the angle
+      }
+
+      angle = (angle + Math.PI / 2) % (2 * Math.PI);
+      const percentage = (angle / (2 * Math.PI)) * 100;
+      updateAudio(percentage);
+
+      const point = pathRef.current.getPointAtLength((percentage / 100) * totalLength);
+      dotRef.current.setAttribute('cx', point.x);
+      dotRef.current.setAttribute('cy', point.y);
+    },
+    [totalLength],
+  );
+
+  useEffect(() => {
+    const path = pathRef.current;
+    const length = path.getTotalLength();
+    setTotalLength(length);
+    path.style.strokeDasharray = length;
+    path.style.strokeDashoffset = length;
+  }, []);
+
+  const handleMouseDown = e => {
+    setIsDragging(true);
+    handleDrag(e);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  useEffect(() => {
+    const handleMouseMove = e => {
+      if (isDragging) {
+        handleDrag(e);
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging, handleDrag]);
+
+  const handleTimeUpdate = () => {
+    const { currentTime } = audioRef.current;
+    const maxDuration = audioRef.current.duration;
+    const calc = totalLength - (currentTime / maxDuration) * totalLength;
+    pathRef.current.style.strokeDashoffset = calc;
+
+    const percentage = (currentTime / maxDuration) * 100;
+    const point = pathRef.current.getPointAtLength((percentage / 100) * totalLength);
+    dotRef.current.setAttribute('cx', point.x);
+    dotRef.current.setAttribute('cy', point.y);
+  };
+
+  const updateAudio = percentage => {
+    const audio = audioRef.current;
+    const maxDuration = audio.duration;
+    const currentTime = (percentage * maxDuration) / 100;
+    audio.currentTime = currentTime;
+  };
+
+  const playPauseHandler = () => {
+    const audio = audioRef.current;
+    if (audio.paused) {
+      document.querySelectorAll('audio').forEach(a => a.pause());
+      audio.play();
+      setIsPlaying(true);
+    } else {
+      audio.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    const circle = circleRef.current;
+    const dot = dotRef.current;
+    if (!audio) return;
+    const path = circle.querySelector('#seekbar');
+
+    path.style.strokeDasharray = totalLength;
+    path.style.strokeDashoffset = totalLength;
+
+    const handleAudioEnd = () => {
+      setIsPlaying(false);
+      path.style.strokeDashoffset = totalLength;
+    };
+
+    audio.addEventListener('timeupdate', handleTimeUpdate);
+    audio.addEventListener('ended', handleAudioEnd);
+
+    return () => {
+      audio.removeEventListener('timeupdate', handleTimeUpdate);
+      audio.removeEventListener('ended', handleAudioEnd);
+    };
+  }, [isPlaying, totalLength, handleTimeUpdate]);
+
+  return (
+    <section className={`slide__audio ${isPlaying ? 'playing' : 'paused'}`}>
+      <audio ref={audioRef} className="slide__audio-player" controls>
+        <track kind="captions" />
+        <source src="https://www.soundjay.com/ambient/sounds/spring-weather-1.mp3" type="audio/mpeg" />
+      </audio>
+      <figure className="audio__controls">
+        <svg
+          version="1.1"
+          id="circle"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+          viewBox="0 0 100 100"
+          ref={circleRef}
+          alt="Audio Seekbar"
+        >
+          <path
+            id="background"
+            fill="none"
+            stroke="#6d6d6d"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M50,2.9L50,2.9C76,2.9,97.1,24,97.1,50v0C97.1,76,76,97.1,50,97.1h0C24,97.1,2.9,76,2.9,50v0C2.9,24,24,2.9,50,2.9z"
+            onClick={handleDrag}
+          />
+          <path
+            id="seekbar"
+            ref={pathRef}
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M50,2.9L50,2.9C76,2.9,97.1,24,97.1,50v0C97.1,76,76,97.1,50,97.1h0C24,97.1,2.9,76,2.9,50v0C2.9,24,24,2.9,50,2.9z"
+            onMouseDown={handleDrag}
+            onMouseUp={handleMouseUp}
+          />
+          <circle
+            className="progress-handle"
+            ref={dotRef}
+            r="4"
+            cx="50"
+            cy="2"
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+            onTouchStart={handleMouseDown}
+            onTouchEnd={handleMouseUp}
+          />
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" className="equalizer" viewBox="0 0 100 100" alt="Equalizer">
+          <g className="equalizer-group">
+            <rect className="bar" />
+            <rect className="bar" />
+            <rect className="bar" />
+            <rect className="bar" />
+            <rect className="bar" />
+          </g>
+        </svg>
+        <button className="play-pause" onClick={playPauseHandler} aria-label="Play Pause Button">
+          <span className="hidden">{isPlaying ? 'Pause' : 'Play'}</span>
+        </button>
+      </figure>
+    </section>
+  );
+};
+
+export default AudioPlayer;
+```
+
+### Importing Dependencies
+
+First off, we're importing React and some hooks like useRef, useEffect, useState, and useCallback to handle state and side effects in our component.
+
+### Setting up Refs and State
+
+We're using useRef to grab references to our audio element and SVG elements. State variables like isPlaying, isDragging, and totalLength help us manage the player's behavior.
+
+### Handling Seek Circle Dragging
+
+The handleDrag function calculates the angle and updates the audio progress based on the user's dragging action. It also updates the position of the draggable dot.
+
+### Initializing SVG Path Length
+
+In useEffect, we set up the initial total length of the SVG path.
+
+### Managing Mouse Events
+
+We add and remove event listeners for mouse movement and mouse up events to handle dragging properly.
+
+### Updating Audio Progress
+
+The handleTimeUpdate function keeps the SVG progress in sync with the audio's current time.
+
+### Controlling Play and Pause
+
+playPauseHandler toggles between playing and pausing the audio. It also pauses any other playing audio on the page.
+
+### Cleanup
+
+We ensure to remove event listeners and clean up side effects in our useEffect hooks to prevent memory leaks.
+
+### Rendering JSX
+
+Finally, we return the JSX that renders our audio player, complete with SVG-based seek bar and play/pause button. You can dive deeper into the code in the CodeSandbox link above.
+
+Hope this helps! If you have any questions or want to chat, hit me up on [Bluesky](https://bsky.app/profile/hannahgoodridge.dev).
+
+And if you want to dig into the code, you can check it out on my CodeSandbox:
+
+<IframeWrapper src="https://codesandbox.io/embed/kglfkv?view=preview&module=%2Fsrc%2FAudioPlayer.js&hidenavigation=1" height="600px" />
+
+Happy coding! 🎧🎶
