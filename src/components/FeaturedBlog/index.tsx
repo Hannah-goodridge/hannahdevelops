@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React from 'react';
 import Link from 'next/link';
-import { ChevronRight } from '@components';
+import { ChevronRight } from '@components/icons';
 
 interface BlogFrontmatter {
   title: string;
@@ -36,7 +36,7 @@ const FeaturedBlog = ({ posts }: FeaturedBlogProps) => {
                 <Link
                   className={`hover:text-primary dark:text-white hover:cursor-pointer hover:border-opacity-50 relative w-full flex flex-col items-start md:flex-row md:items-center flex-end justify-between py-8 last-of-type:border-0 border-b-2 border-opacity-25 text-xl font-semibold solid border-white anim-slide-in-left anim-delay-${i} group transition-all`}
                   key={`homepage-blog-link-${post.slug}`}
-                  href={`${post.slug}`}
+                  href={`/blog/${post.slug}`}
                 >
                   <time
                     dateTime={post.date}

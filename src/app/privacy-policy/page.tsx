@@ -17,7 +17,7 @@ export default function PrivacyPage() {
   const { frontmatter, body } = getPrivacyContent();
   const { title } = frontmatter;
   return (
-    <PageWrapper>
+
       <div className="anim-triggered">
         <section className="dark:bg-primary text-primary dark:text-white bg-white lg:min-h-full pt-12 py-12 lg:py-32 px-4 xl:px-0">
           <div className="max-w-xl lg:max-w-screen-xl mx-auto flex flex-col lg:flex-row justify-between pt-12 lg:pt-32 xl:px-0 px-4 relative">
@@ -34,6 +34,6 @@ export default function PrivacyPage() {
           </div>
         </section>
       </div>
-    </PageWrapper>
+
   );
 }

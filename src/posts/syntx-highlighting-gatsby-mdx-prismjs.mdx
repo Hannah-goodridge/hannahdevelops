@@ -1,5 +1,4 @@
 ---
-slug: '/blog/syntx-highlighting-gatsby-mdx-prismjs'
 date: '2021-02-26'
 title: 'Migrating from .md to .mdx files in Gatsby '
 description: 'Migrating from .md to .mdx files in Gatsby a how to guide '
@@ -7,6 +6,7 @@ tags: 'Blog, First post, Personal'
 author: 'Hannah Goodridge'
 metaTitle: 'Migrating from .md to .mdx files in Gatsby'
 metaDescription: 'Migrating from .md to .mdx files in Gatsby a how to guide'
+type: 'blog'
 ---
 
 I recently migrated my content over from plain markdown files to MDX files because I wanted to harness the power of using react components in some of my blog posts.
@@ -47,7 +47,7 @@ Notice that I've had to add the path to my content folder where I keep my conten
 
 In order to process and use Markdown or MDX in Gatsby, you can use the gatsby-source-filesystem plugin.
 
-The `gatsby-plugin-page-creator` is optional but I need it becuase here I'm creating additional “pages” so want to override the default usage.
+The `gatsby-plugin-page-creator` is optional but I need it becuase here I'm creating additional "pages" so want to override the default usage.
 
 In your component import the following:
 

@@ -1,5 +1,4 @@
 ---
-slug: '/blog/netlify-greenhouse-lambda-functions'
 date: '2021-05-25'
 title: 'Implementing a Netlify Function with Greenhouse Job Board API POST Request in Gatsby'
 description: 'Learn step-by-step how to implement a Netlify Lambda function to send a POST request to the Greenhouse Job Board API using Gatsby and Axios.'
@@ -8,6 +7,7 @@ author: 'Hannah Goodridge'
 metaTitle: 'Implementing a Netlify Function with Greenhouse Job Board API in Gatsby'
 metaDescription: 'Discover how to set up a Netlify Lambda function to send POST requests to the Greenhouse Job Board API using Gatsby and Axios. Step-by-step guide by Hannah Goodridge.'
 keywords: 'Netlify function, Greenhouse Job Board API, Gatsby POST request, Lambda function Netlify, Axios POST request, Gatsby and Netlify, JavaScript Lambda, Gatsby tutorial, Netlify tutorial, API integration in Gatsby'
+type: 'blog'
 ---
 
 I recently had the pleasure of having to integrate a greenhouse job board into a careers page and couldn't find many good examples to call on, so I've posted my own incase it should help somebody.
@@ -109,7 +109,7 @@ A couple of things to note here, firstly, store your api token as a environment 
 
 The second things is to specify the correct folder within netlify. This can be found under Functions > Settings, then edit the functions directory to be your functions folder at the root of your site.
 
-An important thing to note, if you don’t configure a custom functions directory, Netlify will use netlify/functions as the default and deploy any functions you save there.
+An important thing to note, if you don't configure a custom functions directory, Netlify will use netlify/functions as the default and deploy any functions you save there.
 
 Within the form component we have created an onSubmit handler, which does the first part of a fetch request:
 

@@ -3,23 +3,32 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { getSortedPostsData, getBlogPosts, getPlaygroundPosts } from '../../../lib/posts';
-import PageWrapper from '../../../components/PageWrapper';
 import { BlogPostTop, PrevNextPosts, BlogLikeCounter, IframeWrapper, LinkableTitle, CodeHighlight, DraggableAudioPlayer, RichText } from '../../../components';
 import readingTime from 'reading-time';
 import { MDXRemote } from 'next-mdx-remote/rsc';
+import { Metadata, ResolvingMetadata } from 'next';
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const { frontmatter } = await getPostData(params.slug);
-  const { title, description, slug, tags, author } = frontmatter as { title: string, description: string, slug: string, tags: string, author: string };
+type PageProps = {
+  params: { slug: string };
+};
+
+export async function generateMetadata({ params: { slug } }: PageProps, parent: ResolvingMetadata): Promise<Metadata> {
+  const fullPath = path.join(process.cwd(), `src/posts/${slug}.mdx`);
+  const fileContents = fs.readFileSync(fullPath, 'utf8');
+  const { data: frontmatter } = matter(fileContents);
+
+  const { title, description, tags, author } = frontmatter as { title: string, description: string, slug: string, tags: string, author: string };
   const keywords = tags ? tags.split(',').map(tag => tag.trim()) : [];
-  const canonicalUrl = `https://hannahgoodridge.dev${slug}`;
+  const canonicalUrl = `https://hannahgoodridge.dev/blog/${slug}`;
 
   return {
     title,
     description,
     keywords,
-    author,
-    canonical: canonicalUrl,
+    authors: [{ name: author }],
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title,
       description,
@@ -51,18 +60,17 @@ export function generateStaticParams() {
   }));
 }
 
-async function getPostData(slug: string) {
+export default async function Post({ params: { slug } }: PageProps) {
   const fullPath = path.join(process.cwd(), `src/posts/${slug}.mdx`);
   const fileContents = fs.readFileSync(fullPath, 'utf8');
   const { data, content } = matter(fileContents);
   const stats = readingTime(content);
-  return { frontmatter: { ...data, slug: `/blog/${slug}` }, body: content, stats };
-}
 
-export default async function Post({ params }: { params: { slug: string } }) {
-  const { frontmatter, body, stats } = await getPostData(params.slug);
-  const { title, author, date, slug, description } = frontmatter as { title: string, author: string, date: string, slug: string, description: string };
-  const postType = slug.includes('/blog') ? 'blog' : 'playground';
+  const frontmatter = { ...data, slug: `/blog/${slug}` };
+  const body = content;
+
+  const { title, author, date, description } = frontmatter as { title: string, author: string, date: string, slug: string, description: string };
+  const postType = (frontmatter.slug as string).includes('/blog') ? 'blog' : 'playground';
   const allPosts = postType === 'blog' ? getBlogPosts() : getPlaygroundPosts();
 
   const jsonLd = {
@@ -94,13 +102,13 @@ export default async function Post({ params }: { params: { slug: string } }) {
         />
         <section className="max-w-2xl w-full m-auto px-4 lg:px-0">
           <BlogPostTop time={stats.text} date={date} title={title} author={author} />
-          <BlogLikeCounter postId={params.slug} />
+          <BlogLikeCounter postId={slug} />
           <article className="richtext px-4 md:px-0 anim-slide-in-bottom">
             <MDXRemote source={body} components={components} />
           </article>
         </section>
         <section className=" w-full m-auto px-4 lg:px-0">
-            <PrevNextPosts posts={allPosts} currentSlug={params.slug} />
+            <PrevNextPosts posts={allPosts} currentSlug={slug} />
         </section>
       </div>
   );

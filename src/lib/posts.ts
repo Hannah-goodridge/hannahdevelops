@@ -23,26 +23,36 @@ export function getSortedPostsData(): Post[] {
       const fileContents = fs.readFileSync(fullPath, 'utf8');
       const { data } = matter(fileContents);
 
-      if (data.slug && data.date) {
-        acc.push({ id, ...data } as Post);
+      if ((data.type === 'blog' || data.type === 'playground') && data.date) {
+        acc.push({
+          id,
+          ...data,
+          slug: id,
+        } as Post);
       }
     }
     return acc;
   }, []);
 
-  return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1));
+  return allPostsData.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    return dateB.getTime() - dateA.getTime();
+  });
 }
 
 export function getBlogPosts(): Post[] {
   const allPosts = getSortedPostsData();
-  const blogPosts = allPosts.filter(post => post.slug && post.slug.includes('/blog'));
+  const blogPosts = allPosts.filter(post => (post as any).type === 'blog');
   return blogPosts;
 }
+
 export function getPlaygroundPosts(): Post[] {
   const allPosts = getSortedPostsData();
-  const playgroundPosts = allPosts.filter(post => post.slug && post.tags && post.tags.includes('Code Snippet'));
+  const playgroundPosts = allPosts.filter(post => (post as any).type === 'playground');
   return playgroundPosts;
 }
+
 export function getFeaturedPosts(): Post[] {
   const allPosts = getSortedPostsData();
   const blogPosts = allPosts.filter(post => post.slug);
