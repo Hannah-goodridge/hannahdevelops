@@ -6,19 +6,31 @@ import { getSortedPostsData, getBlogPosts, getPlaygroundPosts } from '../../../l
 import { BlogPostTop, PrevNextPosts, BlogLikeCounter, IframeWrapper, LinkableTitle, CodeHighlight, DraggableAudioPlayer, RichText } from '../../../components';
 import readingTime from 'reading-time';
 import { MDXRemote } from 'next-mdx-remote/rsc';
-import { Metadata, ResolvingMetadata } from 'next';
+import { Metadata } from 'next';
+
 
 type PageProps = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
-export async function generateMetadata({ params: { slug } }: PageProps, parent: ResolvingMetadata): Promise<Metadata> {
+async function getPostData(slug: string) {
   const fullPath = path.join(process.cwd(), `src/posts/${slug}.mdx`);
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
-  const { data: frontmatter } = matter(fileContents);
+  const fileContents = await fs.promises.readFile(fullPath, 'utf8');
+  const { data, content } = matter(fileContents);
+  const stats = readingTime(content);
+  return {
+    frontmatter: { ...data, slug },
+    body: content,
+    stats,
+  };
+}
 
-  const { title, description, tags, author } = frontmatter as { title: string, description: string, slug: string, tags: string, author: string };
-  const keywords = tags ? tags.split(',').map(tag => tag.trim()) : [];
+
+export async function generateMetadata({ params: paramsPromise }: PageProps): Promise<Metadata> {
+  const { slug } = await paramsPromise;
+  const { frontmatter } = await getPostData(slug);
+  const { title, description, tags, author } = frontmatter as any;
+  const keywords = tags ? tags.split(',').map((tag: string) => tag.trim()) : [];
   const canonicalUrl = `https://hannahgoodridge.dev/blog/${slug}`;
 
   return {
@@ -60,18 +72,11 @@ export function generateStaticParams() {
   }));
 }
 
-export default async function Post({ params: { slug } }: PageProps) {
-  const fullPath = path.join(process.cwd(), `src/posts/${slug}.mdx`);
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
-  const { data, content } = matter(fileContents);
-  const stats = readingTime(content);
-
-  const frontmatter = { ...data, slug: `/blog/${slug}` };
-  const body = content;
-
-  const { title, author, date, description } = frontmatter as { title: string, author: string, date: string, slug: string, description: string };
-  const postType = (frontmatter.slug as string).includes('/blog') ? 'blog' : 'playground';
-  const allPosts = postType === 'blog' ? getBlogPosts() : getPlaygroundPosts();
+export default async function Post({ params: paramsPromise }: PageProps) {
+  const { slug } = await paramsPromise;
+  const { frontmatter, body, stats } = await getPostData(slug);
+  const { title, author, date, description, type } = frontmatter as any;
+  const allPosts = type === 'blog' ? getBlogPosts() : getPlaygroundPosts();
 
   const jsonLd = {
     '@context': 'https://schema.org',

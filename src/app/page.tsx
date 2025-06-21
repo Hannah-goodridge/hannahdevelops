@@ -1,5 +1,4 @@
 import React from 'react';
-import PageWrapper from '@components/PageWrapper';
 import {
   ContactIntro,
   HomepageIntro,
@@ -8,7 +7,7 @@ import {
   LogoBlock,
   FeaturedBlog,
 } from '@components';
-import { getFeaturedPosts, getSortedPostsData } from '../lib/posts';
+import { getFeaturedPosts } from '../lib/posts';
 
 export default function Home() {
   const posts = getFeaturedPosts();

@@ -1,4 +1,5 @@
 import EuroGenerator from '@components/EuroGenerator';
+import { Suspense } from 'react';
 
 export const metadata = {
   title: 'Hannah Goodridge - Frontend Developer | Euro Generator 2024',
@@ -8,5 +9,9 @@ export const metadata = {
 };
 
 export default function Euro2024Page() {
-  return <EuroGenerator />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EuroGenerator />
+    </Suspense>
+  );
 }

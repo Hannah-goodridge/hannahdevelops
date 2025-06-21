@@ -159,7 +159,7 @@ const EuroGenerator = () => {
     router.push(`${pathname}?state=${stateStr}`);
   }, [participants, method, pathname, router]);
 
-  const prevParticipantsRef = useRef<string[]>();
+  const prevParticipantsRef = useRef<string[] | null>(null);
 
   useEffect(() => {
     if (currentMethod !== method) {
@@ -222,7 +222,7 @@ const EuroGenerator = () => {
   };
 
   return (
-    <PageWrapper>
+    <>
       <section className=" bg-no-repeat bg-white dark:bg-primary text-primary dark:text-white  lg:min-h-full py-32 px-4 xl:px-0">
         <div className="max-w-xl lg:max-w-screen-xl mx-auto flex flex-col lg:flex-row justify-center pt-12 lg:pt-32 xl:px-0 px-4 relative">
           <div className="w-full lg:w-2/3 overflow-hidden  flex flex-col gap-8 justify-items-center text-center items-center">
@@ -441,7 +441,7 @@ const EuroGenerator = () => {
           </div>
         </section>
       )}
-    </PageWrapper>
+    </>
   );
 };
 

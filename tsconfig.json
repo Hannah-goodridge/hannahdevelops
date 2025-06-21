@@ -21,6 +21,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@assets/*": ["./src/assets/*"],
+      "@components": ["./src/components/index.ts"],
       "@components/*": ["./src/components/*"],
       "@context/*": ["./src/context/*"],
       "@lib/*": ["./src/lib/*"],
