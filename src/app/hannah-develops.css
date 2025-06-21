@@ -237,8 +237,8 @@ main {
   }
 }
 
-.bg-gradient-right {
-  background: var(--gradient-right);
+.text-gradient-right {
+  background-image: var(--gradient-right);
 }
 .bg-gradient-left {
   background: var(--gradient-left);

@@ -6,8 +6,13 @@ import {
   ColourSquares,
   LogoBlock,
   FeaturedBlog,
-} from '@components';
+} from '@components/index';
 import { getFeaturedPosts } from '../lib/posts';
+
+export const metadata = {
+  title: "Hannah Goodridge - Frontend Developer & Designer",
+  description: "Portfolio and blog of Hannah Goodridge, frontend developer and designer based in Bristol.",
+};
 
 export default function Home() {
   const posts = getFeaturedPosts();

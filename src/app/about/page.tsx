@@ -10,6 +10,11 @@ import ME_IMAGE from '@assets/images/me.jpg';
 
 const ABOUT_PATH = path.join(process.cwd(), 'src/posts/about.mdx');
 
+export const metadata = {
+  title: "About Hannah Goodridge - Frontend Developer",
+  description: "Learn more about Hannah Goodridge, a frontend developer based in Bristol, UK, her career, and her interests.",
+};
+
 function getAboutContent() {
   const fileContents = fs.readFileSync(ABOUT_PATH, 'utf8');
   const { data, content } = matter(fileContents);

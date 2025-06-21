@@ -6,7 +6,7 @@ export default function sitemap() {
     lastModified: new Date(post.date).toISOString().split('T')[0],
   }));
 
-  const routes = ['', '/about', '/blog', '/playground', '/contact'].map((route) => ({
+  const routes = ['', '/about', '/blog', '/playground', '/contact', '/euro-2024', '/privacy-policy', '/sitemap', '/404'].map((route) => ({
     url: `https://hannahgoodridge.dev${route}`,
     lastModified: new Date().toISOString().split('T')[0],
   }));

@@ -29,7 +29,7 @@ const PlaygroundBlock = ({ posts }: PlaygroundBlockProps) => {
               {`Hannah's snippets`}
             </h2>
             <p className="text-md text-center tracking-wide font-serif  max-w-3xl anim-slide-in-bottom anim-delay-3">
-              {`This is a collection of code snippets I've created for fun, to learn new things or to solve a problem. They are not full projects, but rather small pieces of code that I've found interesting.`}
+              {`Welcome to my digital playground - a collection of projects and code experiments I've created to explore new technologies, solve interesting problems, and have fun coding. From small interactive demos to full-featured applications, each one was a chance to learn something new.`}
             </p>
           </div>
         </div>
