@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { ChevronRight } from '@components/icons';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
@@ -19,10 +20,10 @@ const Button: React.FC<ButtonProps> = ({
   size = 'md',
   ...props
 }) => {
-  const baseClasses = 'inline-flex items-center justify-center font-medium transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-highlight';
+  const baseClasses = 'inline-flex items-center justify-center font-medium transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-highlight';
 
   const variantClasses = {
-    primary: 'bg-highlight text-white shadow-lg hover:shadow-xl',
+    primary: 'bg-highlight text-white shadow-lg btn-primary-3d',
     secondary: 'bg-white text-primary border-2 border-primary hover:bg-primary hover:text-white'
   };
 
@@ -38,6 +39,7 @@ const Button: React.FC<ButtonProps> = ({
     return (
       <Link href={href} className={classes} role="button">
         {children}
+        <ChevronRight className="w-4 h-4 ml-2" />
       </Link>
     );
   }

@@ -105,7 +105,7 @@ const Nav = () => {
       </nav>
       <button
         type="button"
-        className={`${isMenuOpen ? 'isActive ' : ''} w-8 h-8  rounded-md lg:hidden fixed top-5 right-5 m-0 nav-trigger z-50`}
+        className={`${isMenuOpen ? 'isActive ' : ''} w-8 h-8  rounded-md lg:hidden fixed top-5 right-5 m-0 nav-trigger z-30`}
         onClick={toggleMenu}
         aria-expanded={isMenuOpen ? 'true' : 'false'}
       >

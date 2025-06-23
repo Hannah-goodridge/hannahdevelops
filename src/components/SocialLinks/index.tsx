@@ -35,7 +35,7 @@ const SocialLinks: React.FC = () => {
     <ul className="flex flex-row items-center gap-3">
       {links.map(({ href, icon: Icon, label }) => (
         <li key={label} className="w-4 h-5 cursor-pointer">
-          <a href={href} className="text-primary dark:text-white cursor-pointer opacity-100 transition-opacity hover:opacity-50" aria-label={label}>
+          <a href={href} className="text-white cursor-pointer opacity-100 transition-opacity hover:opacity-50" aria-label={label}>
             <Icon width={20} height={20} />
           </a>
         </li>

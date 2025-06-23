@@ -14,6 +14,7 @@
     --gradient-bottom: linear-gradient(-180deg, rgba(244,135,110,1) 0%, rgba(255,193,102,1) 50%, rgba(73,197,184,1) 100%);
     --gradient-left: linear-gradient(90deg, rgba(244,135,110,1) 0%, rgba(255,193,102,1) 50%, rgba(73,197,184,1) 100%);
     --gradient-right: linear-gradient(-90deg, rgba(244,135,110,1) 0%, rgba(255,193,102,1) 50%, rgba(73,197,184,1) 100%);
+    --gradient-highlight-flash: linear-gradient(to right, var(--color-highlight), var(--color-peach), var(--color-yellow), var(--color-peach), var(--color-highlight));
     --hero-inverted: url('../assets/images/bg-hero-teal.svg');
 
 }
@@ -240,6 +241,9 @@ main {
 .text-gradient-right {
   background-image: var(--gradient-right);
 }
+.bg-gradient-right {
+  background: var(--gradient-right);
+}
 .bg-gradient-left {
   background: var(--gradient-left);
 }
@@ -319,6 +323,21 @@ main {
   border-image: url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='50' y1='100' x2='50' y2='0'%3E%3Cstop offset='0' stop-color='%2349c5b8'/%3E%3Cstop offset='.33' stop-color='%23f4876e'/%3E%3Cstop offset='.66' stop-color='%23ffc12a'/%3E%3Cstop offset='.999' stop-color='%2349c5b8'/%3E%3C/linearGradient%3E%3Cpath d='M1.5 1.5h97v97h-97v-97' fill='none' stroke='url(%23a)' stroke-width='3' stroke-linecap='square' stroke-dasharray='388'/%3E%3C/svg%3E")
     1;
   border-image-radius: 10px;
+}
+
+.bg-gradient-border {
+  background: linear-gradient(to bottom, #49c5b8, #f4876e, #ffc12a, #49c5b8);
+  padding: 2px; /* This padding acts as the border thickness */
+}
+
+.btn-primary-3d {
+  box-shadow: 0 5px 0 var(--color-lowlight);
+  transition: all 0.1s ease-in-out !important;
+}
+
+.btn-primary-3d:active {
+  transform: translateY(5px);
+  box-shadow: 0 0px 0 var(--color-lowlight);
 }
 
 .richtext blockquote::after {
@@ -493,6 +512,20 @@ main {
     transform: translateY(0);
     animation-timing-function: ease-out;
   }
+}
+
+@keyframes color-reveal {
+  0%,
+  50% {
+    color: var(--reveal-color, var(--color-highlight));
+  }
+  100% {
+    color: inherit;
+  }
+}
+
+.color-reveal {
+  animation: color-reveal 1.5s forwards;
 }
 
 @keyframes gooey-breathing {

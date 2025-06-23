@@ -4,7 +4,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
-
+import Button from '@components/Button';
 
 import ME_IMAGE from '@assets/images/me.jpg';
 
@@ -28,8 +28,8 @@ export default function AboutPage() {
 
       <div className="anim-triggered">
         <section className="dark:bg-primary text-primary dark:text-white bg-white lg:min-h-full pt-12 py-12 lg:py-32 px-4 xl:px-0">
-          <div className="max-w-xl lg:max-w-screen-xl mx-auto flex flex-col lg:flex-row justify-between pt-12 lg:pt-32 xl:px-0 px-4 relative">
-            <div className="w-full mt-16 lg:w-3/5 lg:mt-0 overflow-hidden ">
+          <div className="max-w-xl lg:max-w-screen-xl mx-auto flex flex-col lg:flex-row justify-between pt-12 lg:pt-32 xl:px-0 px-4 relative gap-4">
+            <div className="w-full mt-16 lg:w-3/5 lg:mt-0 ">
               <p className="text-md font-serif font-medium tracking-wide opacity-75 mb-6 anim-slide-in-bottom anim-delay-1">
                 – Early beginnings
               </p>
@@ -37,6 +37,7 @@ export default function AboutPage() {
                 <article className="richtext">
                   <ReactMarkdown>{body}</ReactMarkdown>
                 </article>
+                <Button href="mailto:hannahgoodridge@outlook.com?subject=Mail to Hannah">Get In Touch</Button>
               </div>
             </div>
             <div className="w-full lg:w-1/3 overflow-hidden">

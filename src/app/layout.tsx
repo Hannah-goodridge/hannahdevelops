@@ -1,6 +1,7 @@
 import './globals.css';
-import PageWrapper from '@components/PageWrapper';
-import ThemeScript from '@components/ThemeScript';
+import PageWrapper from '../components/PageWrapper';
+import Header from '../components/Header';
+import ThemeScript from '../components/ThemeScript';
 import React from 'react';
 
 export const metadata = {
@@ -39,6 +40,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz@9..40&family=Poppins:ital,wght@0,300;0,400;0,500;0,600&display=swap" rel="stylesheet"></link>
       </head>
       <body className="font-body font-normal">
+        <Header />
         <PageWrapper>{children}</PageWrapper>
       </body>
     </html>
