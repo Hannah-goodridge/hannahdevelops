@@ -27,6 +27,35 @@ body, html {
   font-family: var(--font-body);
   @apply text-gray-900 flex flex-col justify-center items-center w-screen overflow-x-hidden;
 }
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-highlight);
+  border-radius: 20px;
+  border: 3px solid var(--color-secondary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-lowlight);
+}
+
+::selection {
+  background: var(--color-highlight);
+  color: var(--color-primary);
+}
+
+::-moz-selection {
+  background: var(--color-highlight);
+  color: var(--color-primary);
+}
+
 main {
   @apply w-screen;
 }
