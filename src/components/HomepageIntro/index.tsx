@@ -18,7 +18,7 @@ export default function HomepageIntro() {
   };
   return (
     <section className=" dark:bg-primary text-primary dark:text-white lg:h-screen lg:min-h-full py-32 relative overflow-hidden">
-      <HeroBg className="hero-svg-background absolute top-0 left-0 w-screen h-screen object-cover -z-10" />
+      <HeroBg aria-hidden="true" className="hero-svg-background absolute top-0 left-0 w-screen h-screen object-cover -z-10" />
       <div className="max-w-xl lg:max-w-screen-xl mx-auto flex flex-col lg:flex-row justify-between pt-12 lg:pt-32 xl:px-0 px-4 relative">
         <div className="w-full lg:w-2/3 ">
           <div className="lg:w-4/5 ">
@@ -27,6 +27,7 @@ export default function HomepageIntro() {
                 {'Hannah'.split('').map((letter, index) => (
                   <span
                     key={index}
+                    tabIndex={0}
                     className={`inline-block transition-all duration-300 ${
                       index % 3 === 0 ? 'hover:scale-110 hover:text-highlight hover:cursor-pointer' :
                       index % 3 === 1 ? 'hover:scale-125 hover:text-peach hover:rotate-3 hover:cursor-pointer' :
@@ -43,6 +44,7 @@ export default function HomepageIntro() {
                 {'Goodridge.'.split('').map((letter, index) => (
                   <span
                     key={index}
+                    tabIndex={0}
                     className={`inline-block transition-all duration-300 ${
                       index % 4 === 0 ? 'hover:scale-110 hover:text-highlight hover:cursor-pointer' :
                       index % 4 === 1 ? 'hover:scale-125 hover:text-peach hover:rotate-3 hover:cursor-pointer' :
@@ -64,8 +66,9 @@ export default function HomepageIntro() {
               <Link
                 href="https://www.linkedin.com/in/hannah-goodridge-59512841/"
                 className="text-primary dark:text-white cursor-pointer transition-colors hover:text-highlight"
+                aria-label="Follow me on LinkedIn"
               >
-                <span className="hidden">LinkedIn</span>
+                <span className="sr-only">LinkedIn</span>
                 <LinkedIn width={20} height={20} />
               </Link>
             </li>
@@ -73,8 +76,9 @@ export default function HomepageIntro() {
               <Link
                 href="https://github.com/Hannah-goodridge"
                 className="text-primary dark:text-white cursor-pointer transition-colors hover:text-highlight"
+                aria-label="Follow me on Github"
               >
-                <span className="hidden">Github</span>
+                <span className="sr-only">Github</span>
                 <Github width={20} height={20} />
               </Link>
             </li>
@@ -82,8 +86,9 @@ export default function HomepageIntro() {
               <Link
                 href="https://bsky.app/profile/hannahdevelops.bsky.social"
                 className="text-primary dark:text-white cursor-pointer transition-colors hover:text-highlight"
+                aria-label="Follow me on Blue Sky"
               >
-                <span className="hidden">Blue Sky</span>
+                <span className="sr-only">Blue Sky</span>
                 <BlueSky width={20} height={20} />
               </Link>
             </li>
@@ -91,18 +96,10 @@ export default function HomepageIntro() {
               <Link
                 href="https://www.instagram.com/hannahg00dridge"
                 className="text-primary dark:text-white cursor-pointer transition-colors hover:text-highlight"
+                aria-label="Follow me on Instagram"
               >
-                <span className="hidden">Instagram</span>
+                <span className="sr-only">Instagram</span>
                 <Instagram width={20} height={20} />
-              </Link>
-            </li>
-            <li className="w-4 h-6 mx-4 cursor-pointer ">
-              <Link href="/cats" className="paw-prints cursor-pointer text-highlight relative">
-                <span className="hidden">Secret link to cats</span>
-                <PawPrint width={20} height={20} className="paw-print-1" />
-                <PawPrint width={12} height={12} className="paw-print-2" />
-                <PawPrint width={10} height={10} className="paw-print-3" />
-                <PawPrint width={8} height={8} className="paw-print-4" />
               </Link>
             </li>
           </ul>
@@ -121,7 +118,7 @@ export default function HomepageIntro() {
         </div>
       </div>
       <div className="flex flex-col items-center justify-center">
-        <button type="button" className="text-primary dark:text-white appearance-none border-0" onClick={scrollToSection}>
+        <button type="button" className="text-primary dark:text-white appearance-none border-0" onClick={scrollToSection} aria-label="Scroll to next section">
           <div className="border border-highlight rounded-full p-4 mt-24 anim-slide-in-bottom anim-delay-5">
             <svg
               className="animate-bounce w-6 h-6 text-primary dark:text-white "
@@ -134,7 +131,7 @@ export default function HomepageIntro() {
             >
               <path d="M19 14l-7 7m0 0l-7-7m7 7V3" />
             </svg>
-            <span className="hidden">Scroll down</span>
+            <span className="sr-only">Scroll down</span>
           </div>
         </button>
       </div>

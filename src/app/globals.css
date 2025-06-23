@@ -1,7 +1,26 @@
-
-
 @import "tailwindcss";
 @import "./hannah-develops.css";
+
+.text-shadow {
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.paw-prints {
+  .paw-print-1,
+  /* ... existing code ... */
+}
 
 
 
