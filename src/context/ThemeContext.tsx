@@ -13,7 +13,17 @@ const ThemeContext = createContext<ThemeContextType>({
 });
 
 const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(() => {
+    if (typeof window === 'undefined') {
+      return true; // Default to dark on the server
+    }
+    const stored = localStorage.getItem('dark');
+    if (stored !== null) {
+      return JSON.parse(stored);
+    }
+    // If no stored theme, respect the OS preference
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
 
   const toggleDark = () => {
     const newDark = !dark;
@@ -24,8 +34,10 @@ const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const isDark = document.documentElement.classList.contains('dark');
-    setDark(isDark);
-  }, []);
+    if (dark !== isDark) {
+      setDark(isDark);
+    }
+  }, [dark]);
 
   return (
     <ThemeContext.Provider
