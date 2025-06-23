@@ -3,6 +3,7 @@ import PageWrapper from '../components/PageWrapper';
 import Header from '../components/Header';
 import ThemeScript from '../components/ThemeScript';
 import React from 'react';
+import Script from 'next/script';
 
 export const metadata = {
   title: "Hannah Goodridge - Frontend Developer & Designer",
@@ -42,6 +43,18 @@ export default function RootLayout({
       <body className="font-body font-normal">
         <Header />
         <PageWrapper>{children}</PageWrapper>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-JJYC296GLP"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-JJYC296GLP');
+          `}
+        </Script>
       </body>
     </html>
   );
