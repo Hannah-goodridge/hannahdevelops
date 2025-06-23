@@ -42,51 +42,7 @@ module.exports = {
           900: '#212121',
         },
       },
-      extend: {
-        screens: {
-          print: { raw: 'print' },
-        },
-        maxWidth: {
-          '1/4': '25%',
-          '1/2': '50%',
-          '3/4': '75%',
-        },
-        maxHeight: {
-          0: '0',
-          '1/4': '25%',
-          '1/2': '50%',
-          '3/4': '75%',
-        },
-        height: {
-          '10%': '10%',
-          '20%': '20%',
-          '30%': '30%',
-          '40%': '40%',
-          '50%': '50%',
-          '60%': '60%',
-          '70%': '70%',
-          '80%': '80%',
-          '90%': '90%',
-          full: '100%',
-          '100px': '100px',
-          '80px': '80px',
-          '60px': '60px',
-        },
-        fontSize: {
-          '7xl': '5rem',
-          '8xl': '6rem',
-        },
-        backgroundImage: {
-          'hero-inverted': "url('../src/assets/images/bg-hero-teal.svg')",
-          'hero-about': "url('../src/assets/images/bg-about.svg')",
-          'gradient-top': 'linear-gradient(180deg, rgba(244,135,110,1) 0%, rgba(255,193,102,1) 50%, rgba(73,197,184,1) 100%)',
-          'gradient-bottom': 'linear-gradient(-180deg, rgba(244,135,110,1) 0%, rgba(255,193,102,1) 50%, rgba(73,197,184,1) 100%)',
-          'gradient-left': 'linear-gradient(90deg, rgba(244,135,110,1) 0%, rgba(255,193,102,1) 50%, rgba(73,197,184,1) 100%)',
-          'gradient-right': 'linear-gradient(-90deg, rgba(244,135,110,1) 0%, rgba(255,193,102,1) 50%, rgba(73,197,184,1) 100%)',
-          sun: "url('../src/assets/svgs/sun.svg')",
-          moon: "url('../src/assets/svgs/moon.svg')",
-        },
-      },
+
     },
     plugins: [],
 };
