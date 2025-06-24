@@ -10,7 +10,7 @@ const ContactIntro = () => {
   const experienceInYears = currentDate - year;
 
   return (
-    <section className="dark:bg-secondary bg-white text-primary dark:text-white lg:h-screen lg:min-h-screen pt-6 px-4 lg:pt-32 xl:px-0 ">
+    <section className="dark:bg-secondary bg-white text-primary dark:text-white lg:h-screen lg:min-h-screen pt-6 lg:pt-32 xl:px-0 ">
       <div className="max-w-xl lg:max-w-screen-xl mx-auto flex flex-col lg:flex-row justify-between pt-16 xl:px-0 px-4 ">
         <div className="w-full mt-16 lg:w-1/3 lg:mt-0 ">
           <p className="text-md font-serif font-medium tracking-wide opacity-50 mb-6 anim-slide-in-bottom">– Contact</p>

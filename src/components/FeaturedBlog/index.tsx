@@ -17,7 +17,7 @@ interface FeaturedBlogProps {
 const FeaturedBlog = ({ posts }: FeaturedBlogProps) => {
 
   return (
-    <section className="dark:bg-secondary bg-white text-primary dark:text-white min-h-screen py-10 px-4 lg:pt-32 xl:px-0">
+    <section className="dark:bg-secondary bg-white text-primary dark:text-white min-h-screen py-10 px-2 lg:pt-32 xl:px-0">
       <div className="max-w-xl lg:max-w-screen-xl mx-auto flex flex-col lg:flex-row justify-between py-16 xl:px-0 px-4 gap-4">
         <div className="w-full lg:w-1/3">
           <p className="text-md font-serif font-medium tracking-wide opacity-50 mb-6 overflow-hidden anim-slide-in-bottom ">– Blog</p>

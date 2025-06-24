@@ -53,14 +53,14 @@ const Nav = () => {
     <>
       <nav
         ref={nav}
-        className={`text-primary dark:text-white w-full fixed pt-4 pb-4 top-0 flex flex-row transition-all ${
-          scrollInfo.isScrollDown ? 'dark:bg-secondary opacity-90 bg-white h-24 z-50' : 'h-auto z-10'
+        className={`text-primary dark:text-white w-full fixed pt-2 pb-4 top-0 flex flex-row transition-all ${
+          scrollInfo.isScrollDown ? 'dark:bg-secondary opacity-90 bg-white h-24 z-30' : 'h-auto z-10'
         }`}
       >
         <div className="w-full max-w-(--breakpoint-xl) mx-auto flex flex-row justify-between items-start lg:items-center flex-end relative px-4 xl:px-0 h-14 md:h-auto z-10">
           <ul className="absolute lg:static">
             <li>
-              <Link className={`${scrollInfo.color} transition duration-500 ease-in-out lg:z-10`} href="/">
+              <Link className={`${scrollInfo.color} transition duration-500 ease-in-out  lg:z-10`} href="/">
                 <span className="hidden">Home</span>
                 <Logo className={`w-16 transition-all ${scrollInfo.isScrollDown ? 'lg:w-16' : 'lg:w-20'}`} width={64} height={64} />
               </Link>
@@ -87,6 +87,19 @@ const Nav = () => {
           <div className="top-7 left-4 absolute">
             <ThemeToggle scrollDown={scrollInfo.isScrollDown} />
           </div>
+          <div className="top-7 right-4 absolute">
+          <button
+            type="button"
+            className={`${isMenuOpen ? 'isActive ' : ''} w-8 h-8  rounded-md lg:hidden fixed top-5 right-5 m-0 nav-trigger z-10`}
+            onClick={toggleMenu}
+            aria-expanded={isMenuOpen ? 'true' : 'false'}
+          >
+            <p className="hidden">mobile menu</p>
+            <span />
+            <span />
+            <span />
+          </button>
+          </div>
           {links.map(link => (
             <Link
               key={link.to}
@@ -96,9 +109,7 @@ const Nav = () => {
               onClick={toggleMenu}
             >
               {link.label}
-              {link.new && (
-                <span className="absolute bottom-10 left-0 text-yellow text-xs px-2 py-1 rounded-full">✨ New ✨</span>
-              )}
+
             </Link>
           ))}
         </ul>

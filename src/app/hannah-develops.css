@@ -313,6 +313,7 @@ main {
 
 .richtext h1 {
   @apply text-4xl font-bold mb-6 leading-tight;
+
 }
 
 .richtext h2 {

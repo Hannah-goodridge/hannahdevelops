@@ -28,7 +28,7 @@ export default function AboutPage() {
 
       <div className="anim-triggered">
         <section className="dark:bg-primary text-primary dark:text-white bg-white lg:min-h-full pt-12 py-12 lg:py-32 px-4 xl:px-0">
-          <div className="max-w-xl lg:max-w-screen-xl mx-auto flex flex-col lg:flex-row justify-between pt-12 lg:pt-32 xl:px-0 px-4 relative gap-4">
+          <div className="max-w-xl lg:max-w-screen-xl mx-auto flex flex-col lg:flex-row justify-between pt-6 lg:pt-32 relative gap-4">
             <div className="w-full mt-16 lg:w-3/5 lg:mt-0 ">
               <p className="text-md font-serif font-medium tracking-wide opacity-75 mb-6 anim-slide-in-bottom anim-delay-1">
                 – Early beginnings

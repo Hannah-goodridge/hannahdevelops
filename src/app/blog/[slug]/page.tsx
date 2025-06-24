@@ -108,7 +108,7 @@ export default async function Post({ params: paramsPromise }: PageProps) {
         <section className="max-w-2xl w-full m-auto px-4 lg:px-0">
           <BlogPostTop time={stats.text} date={date} title={title} author={author} />
           <BlogLikeCounter postId={slug} />
-          <article className="richtext px-4 md:px-0 anim-slide-in-bottom">
+          <article className="richtext px-0 md:px-0 anim-slide-in-bottom">
             <MDXRemote source={body} components={components} />
           </article>
         </section>
