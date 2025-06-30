@@ -37,7 +37,7 @@ export default function AboutPage() {
                 <article className="richtext">
                   <ReactMarkdown>{body}</ReactMarkdown>
                 </article>
-                <Button href="mailto:hannahgoodridge@outlook.com?subject=Mail to Hannah">Get In Touch</Button>
+                <Button href="mailto:%68%61%6e%6e%61%68%67%6f%6f%64%72%69%64%67%65%40%6f%75%74%6c%6f%6f%6b%2e%63%6f%6d?subject=Mail to Hannah">Get In Touch</Button>
               </div>
             </div>
             <div className="w-full lg:w-1/3 overflow-hidden">
